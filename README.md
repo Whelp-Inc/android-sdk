@@ -39,6 +39,11 @@ For Example:
 Second Step : Get Whelp SDK credentials 
 ----------------------------------------
 
+1.  Sign in to the  [Whelp Web platform](https://web.getwhelp.com)  and go to the  [**Apps -> Livechat app**](https://web.getwhelp.com/apps/webchat)  page.
+2.  Click on Install button, if you didn't installed livechat previously, if yes skip this step
+3.  Next click  **Configure**  then  **SDK**.
+4.  Copy the App ID and API key.
+
 ----------------------------------------
 
 Third Step : Start Whelp SDK with this example.
