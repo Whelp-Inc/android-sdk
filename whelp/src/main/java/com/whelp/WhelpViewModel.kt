@@ -1,37 +1,48 @@
 package com.whelp
 
-import android.util.Log
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.whelp.data.GetUrlUseCase
+import com.whelp.data.ApiService
+import com.whelp.data.RetrofitClientInstance.getRetrofitInstance
+import com.whelp.model.AuthResponse
 import com.whelp.model.UserCredentials
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
-import javax.inject.Inject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-@HiltViewModel
-class WhelpViewModel @Inject constructor(private val useCase: GetUrlUseCase) : ViewModel() {
+class WhelpViewModel : ViewModel() {
 
     val url = MutableLiveData<String>()
-    fun getUrl(userCredentials: UserCredentials) {
+    val loadingState = MutableLiveData<Boolean>()
+    val sdkErrorState = MutableLiveData<Boolean>()
 
-        viewModelScope.launch {
-            flow {
-                emit(useCase.execute(userCredentials))
-            }.flowOn(Dispatchers.IO)
-                .catch {
-                    it.printStackTrace()
+    init {
+        loadingState.value = true
+    }
+
+    fun getUrl(context: Context, userCredentials: UserCredentials) {
+
+        val api: ApiService = getRetrofitInstance(context)!!.create(ApiService::class.java)
+        val call: Call<AuthResponse> = api.auth(userCredentials)
+
+        call.enqueue(object : Callback<AuthResponse> {
+            override fun onResponse(call: Call<AuthResponse>?, response: Response<AuthResponse>) {
+                loadingState.value = false
+
+                val body = response.body()
+                val code = response.code()
+                if (body != null && code == 200) {
+                    url.value = body.url
+                }else{
+                    sdkErrorState.value = true
                 }
-                .collect {
-                    url.value = it.url
-                    Log.d("getUrl", "getUrl: ${it.url}")
-                }
-        }
+            }
+
+            override fun onFailure(call: Call<AuthResponse>?, t: Throwable?) {
+                loadingState.value = false
+            }
+        })
     }
 
 }

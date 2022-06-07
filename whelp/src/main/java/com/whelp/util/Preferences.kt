@@ -1,9 +1,11 @@
 package com.whelp.util
 
+import android.content.Context
 import android.content.SharedPreferences
-import javax.inject.Inject
 
-class Preferences @Inject constructor(val sharedPreferences: SharedPreferences) {
+class Preferences(context: Context) {
+    private var sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("MY_PREFS_NAME", Context.MODE_PRIVATE)
 
     fun saveToPrefs(key: String?, value: Any) {
         val editor = sharedPreferences.edit()
