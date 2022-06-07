@@ -51,7 +51,8 @@ Second Step : Get Whelp SDK credentials
 Third Step : Start Whelp SDK with this example.
 -----------------------------------------------
 
- Whelp.Builder()
+-----------------------------------
+ 	Whelp.Builder()
                 .key("key value")
                 .appID("app id")
                 .userCredentials(userCredentials)
