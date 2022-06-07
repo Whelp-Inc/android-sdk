@@ -34,13 +34,6 @@ For Example:
                     "+994XXXXXXXXX"
                 )
             )
-	    
-	    SkyTech.Builder()
-            .key("key")
-            .appID("appID")
-            .userCredentials(userCredentials)
-            .open(this)
-	    
  -----------------------------------
   
    
