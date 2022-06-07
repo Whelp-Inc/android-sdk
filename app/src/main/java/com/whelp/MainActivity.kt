@@ -26,8 +26,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.button.setOnClickListener {
             Whelp.Builder()
-                .key("rPyCMWFMk27ucwYPpZE6")
-                .appID("f4ee05e97792cf5a5f249c8af2fc8068")
+                .key("key")
+                .appID("appId")
                 .userCredentials(userCredentials)
                 .open(this)
         }
