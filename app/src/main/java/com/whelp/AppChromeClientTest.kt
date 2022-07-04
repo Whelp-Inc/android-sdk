@@ -6,7 +6,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import java.lang.ref.WeakReference
 
-class AppChromeClient(private val fragmentWeakReference: WeakReference<WhelpActivity>) :
+class AppChromeClientTest(private val fragmentWeakReference: WeakReference<MainActivity>) :
     WebChromeClient() {
     private var openFileCallback: ValueCallback<Array<Uri>>? = null
 
