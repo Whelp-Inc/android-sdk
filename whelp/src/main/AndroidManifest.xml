@@ -8,9 +8,9 @@
     </queries>
 
     <application>
-        <activity
-            android:name=".WhelpActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".WhelpActivity"-->
+<!--            android:exported="false" />-->
     </application>
 
 </manifest>
