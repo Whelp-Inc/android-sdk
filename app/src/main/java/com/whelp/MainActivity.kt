@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val chromeClient = AppChromeClientTest(WeakReference(this))
+    private val chromeClient = AppChromeClient(WeakReference(this))
     private var contentLauncher: ActivityResultLauncher<String> = getMultipleContentLauncher()
 
     private val TAG = "MainActivity"
