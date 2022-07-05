@@ -96,7 +96,7 @@ Then, initialize webview
             )
 
         Whelp.Builder()
-            .key("ey value")
+            .key("key value")
             .appID("app id")
             .userCredentials(userCredentials)
             .open(this) {
