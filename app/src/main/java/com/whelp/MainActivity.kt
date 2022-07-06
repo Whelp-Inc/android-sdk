@@ -33,8 +33,8 @@ class MainActivity : AppCompatActivity() {
             )
 
         Whelp.Builder()
-            .key("103162530862a2ee9322677")
-            .appID("8e68eb967763dc8326b55e61e3ab3eb4")
+            .key("app_key")
+            .appID("app_id")
             .userCredentials(userCredentials)
             .open(this) {
                 Log.d(TAG, "onCreate: $it")
