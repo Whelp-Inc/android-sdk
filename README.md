@@ -92,7 +92,7 @@ Then, initialize webview
                 "en", Contact(
                     "user@test.com", "Name Surname",
                     "+994XXXXXXXXX"
-                )
+                ),"team name"
             )
 
         Whelp.Builder()
