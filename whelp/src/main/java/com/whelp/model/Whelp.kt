@@ -1,12 +1,14 @@
 package com.whelp.model
 
 import android.content.Context
-import android.util.Log
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.whelp.data.ApiService
 import com.whelp.data.RetrofitClientInstance
-import com.whelp.util.*
+import com.whelp.util.HASH_ID
+import com.whelp.util.Preferences
+import com.whelp.util.Utils
+import com.whelp.util.X_APP_ID
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,11 +31,6 @@ data class Whelp constructor(
             apply { this.userCredentials = userCredentials }
 
         fun open(context: Context, sdkUrl: (String) -> Unit) {
-
-//            val intent = Intent(context.applicationContext, WhelpActivity::class.java)
-//            CredentialHelper.credential.value = Builder(api_key, app_id, userCredentials)
-//            context.startActivity(intent)
-
             createHmac(context)
 
             val api: ApiService = RetrofitClientInstance.getRetrofitInstance(context)!!.create(
@@ -46,20 +43,17 @@ data class Whelp constructor(
                     call: Call<AuthResponse>?,
                     response: Response<AuthResponse>
                 ) {
-//                    loadingState.value = false
 
                     val body = response.body()
                     val code = response.code()
+
                     if (body != null && code == 200) {
                         sdkUrl.invoke(body.url)
-                    } else {
-//                        sdkErrorState.value = true
                     }
                 }
 
                 override fun onFailure(call: Call<AuthResponse>?, t: Throwable?) {
-                    Log.d("onFailure", "onFailure: ${t?.printStackTrace()}")
-//                    loadingState.value = false
+                    t?.printStackTrace()
                 }
             })
         }

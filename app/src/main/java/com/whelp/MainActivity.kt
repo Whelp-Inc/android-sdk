@@ -1,10 +1,10 @@
 package com.whelp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import com.whelp.databinding.ActivityMainBinding
 import com.whelp.model.Contact
 import com.whelp.model.UserCredentials
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
                 "en", Contact(
                     "user@test.com", "Name Surname",
                     "+994XXXXXXXXX"
-                )
+                ), "team Name"
             )
 
         Whelp.Builder()
