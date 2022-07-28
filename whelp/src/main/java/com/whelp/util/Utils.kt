@@ -47,28 +47,6 @@ object Utils {
         }
     }
 
-    fun Context.isOnline(): Boolean {
-        val connectivityManager =
-            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val capabilities =
-            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-        if (capabilities != null) {
-            when {
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
-                    return true
-                }
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
-                    return true
-                }
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
-
     fun Context.isChromeInstalledAndVersionGreaterThan80(): Boolean {
         val pInfo: PackageInfo = try {
             this.packageManager.getPackageInfo("com.android.chrome", 0)

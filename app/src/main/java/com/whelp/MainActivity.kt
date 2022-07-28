@@ -6,9 +6,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.whelp.databinding.ActivityMainBinding
-import com.whelp.model.Contact
-import com.whelp.model.UserCredentials
 import com.whelp.model.Whelp
+import org.json.JSONObject
 import java.lang.ref.WeakReference
 
 class MainActivity : AppCompatActivity() {
@@ -24,18 +23,20 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val userCredentials =
-            UserCredentials(
-                "en", Contact(
-                    "user@test.com", "Name Surname",
-                    "+994XXXXXXXXX"
-                ), "team Name"
-            )
+        val credentials = JSONObject()
+        credentials.put("language","en")
+
+        val contact = JSONObject()
+        contact.put("email","user@test.com")
+        contact.put("fullname","name Surname")
+        contact.put("phone","+994XXXXXXXXX")
+        credentials.put("contact",contact)
+
 
         Whelp.Builder()
-            .key("app_key")
+            .key("api_key")
             .appID("app_id")
-            .userCredentials(userCredentials)
+            .userCredentials(credentials)
             .open(this) {
                 Log.d(TAG, "onCreate: $it")
 
