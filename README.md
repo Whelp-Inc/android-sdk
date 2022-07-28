@@ -87,7 +87,7 @@ In your Fragment/Activity class declare chromeClient, contentLauncher and then a
 
 Then, initialize webview
 
-	val credentials = JSONObject()
+	    val credentials = JSONObject()
         credentials.put("language","en")
 
         val contact = JSONObject()
