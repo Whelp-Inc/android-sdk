@@ -87,18 +87,19 @@ In your Fragment/Activity class declare chromeClient, contentLauncher and then a
 
 Then, initialize webview
 
-	val userCredentials =
-            UserCredentials(
-                "en", Contact(
-                    "user@test.com", "Name Surname",
-                    "+994XXXXXXXXX"
-                ),"team name"
-            )
+	val credentials = JSONObject()
+        credentials.put("language","en")
+
+        val contact = JSONObject()
+        contact.put("email","user@test.com")
+        contact.put("fullname","name Surname")
+        contact.put("phone","+994XXXXXXXXX")
+        credentials.put("contact",contact)
 
         Whelp.Builder()
             .key("key value")
             .appID("app id")
-            .userCredentials(userCredentials)
+            .userCredentials(credentials)
             .open(this) {
 
                 binding.whelpView.webChromeClient = chromeClient
