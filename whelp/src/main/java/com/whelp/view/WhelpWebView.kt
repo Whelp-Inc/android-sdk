@@ -3,10 +3,13 @@ package com.whelp.view
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.webkit.WebView
 import android.widget.Toast
+import com.google.firebase.messaging.FirebaseMessaging
 import com.whelp.R
 import com.whelp.util.Utils.isChromeInstalledAndVersionGreaterThan80
+import timber.log.Timber
 
 class WhelpWebView : WebView {
 
@@ -17,6 +20,7 @@ class WhelpWebView : WebView {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         initWebView(context)
     }
+
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun initWebView(context: Context) {
