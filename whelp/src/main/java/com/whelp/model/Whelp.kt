@@ -1,19 +1,18 @@
 package com.whelp.model
 
 import android.content.Context
+import android.util.Log
+import com.google.firebase.messaging.FirebaseMessaging
 import com.whelp.data.ApiService
 import com.whelp.data.RetrofitClientInstance
-import com.whelp.util.HASH_ID
-import com.whelp.util.Preferences
-import com.whelp.util.Utils
-import com.whelp.util.X_APP_ID
+import com.whelp.util.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
+import timber.log.Timber
 
 data class Whelp constructor(
     val api_key: String?,
@@ -26,6 +25,7 @@ data class Whelp constructor(
         var app_id: String? = null,
         var jsonParams: JSONObject? = null
     ) {
+        val TAG = "getFirebaseToken"
 
         fun key(api_key: String) = apply { this.api_key = api_key }
         fun appID(app_id: String) = apply { this.app_id = app_id }
@@ -33,37 +33,62 @@ data class Whelp constructor(
             apply { this.jsonParams = jsonParams }
 
         fun open(context: Context, sdkUrl: (String) -> Unit) {
+            val preferences = Preferences(context)
 
-            val api: ApiService = RetrofitClientInstance.getRetrofitInstance(context)!!.create(
-                ApiService::class.java
-            )
+            getFirebaseToken {
+                Log.d(TAG, "open: $it")
+                preferences.saveToPrefs(FIREBASE_TOKEN, it)
 
-            createHmac(context, jsonParams.toString())
+                val api: ApiService = RetrofitClientInstance.getRetrofitInstance(context)!!.create(
+                    ApiService::class.java
+                )
+
+                createHmac(context, jsonParams.toString())
+
+                val res = jsonParams.toString().toRequestBody("application/json".toMediaType())
+
+                val call: Call<AuthResponse> = api.auth(res)
 
 
-            val res = jsonParams.toString().toRequestBody("application/json".toMediaType())
+                call.enqueue(object : Callback<AuthResponse> {
+                    override fun onResponse(
+                        call: Call<AuthResponse>,
+                        response: Response<AuthResponse>
+                    ) {
 
-            val call: Call<AuthResponse> = api.auth(res)
+                        val body = response.body()
+                        val code = response.code()
 
+                        Log.d("onResponse", "onResponse:--- $body $code")
 
-            call.enqueue(object : Callback<AuthResponse> {
-                override fun onResponse(
-                    call: Call<AuthResponse>,
-                    response: Response<AuthResponse>
-                ) {
-
-                    val body = response.body()
-                    val code = response.code()
-
-                    if (body != null && code == 200) {
-                        sdkUrl.invoke(body.url)
+                        if (body != null && code == 200) {
+                            sdkUrl.invoke(body.url)
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                    t.printStackTrace()
+                    override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+                        t.printStackTrace()
+                    }
+                })
+            }
+        }
+
+        private fun getFirebaseToken(firebaseToken: (String) -> Unit) {
+
+            FirebaseMessaging.getInstance().token
+                .addOnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        return@addOnCompleteListener
+                    }
+
+                    firebaseToken.invoke(task.result)
+                    Log.d("getFirebaseToken", "getFirebaseToken: ${task.result}")
                 }
-            })
+                .addOnCanceledListener {
+                    Timber.tag("getFbNotificationCode").d("addOnCanceledListener")
+                }
+                .addOnFailureListener {
+                }
         }
 
         private fun createHmac(context: Context, json: String?) {

@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.whelp.databinding.ActivityMainBinding
 import com.whelp.model.Whelp
+import com.whelp.util.LogoutWhelp
 import org.json.JSONObject
 import java.lang.ref.WeakReference
 
@@ -34,8 +35,8 @@ class MainActivity : AppCompatActivity() {
 
 
         Whelp.Builder()
-            .key("api_key")
-            .appID("app_id")
+            .key("8122035606297043751cd2")
+            .appID("699c11f6fe8db479107dcd958dc4e6b0")
             .userCredentials(credentials)
             .open(this) {
                 Log.d(TAG, "onCreate: $it")
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity() {
 
                 binding.whelpView.loadUrl(it)
             }
+
     }
 
     fun launchGetMultipleContents(type: String) {
