@@ -1,6 +1,5 @@
 package com.whelp.data
 
-import android.util.Log
 import com.whelp.util.FIREBASE_TOKEN
 import com.whelp.util.HASH_ID
 import com.whelp.util.Preferences

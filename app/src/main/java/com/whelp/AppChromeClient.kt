@@ -30,3 +30,4 @@ class AppChromeClient(private val fragmentWeakReference: WeakReference<MainActiv
         openFileCallback = null
     }
 }
+
