@@ -28,15 +28,21 @@ class MainActivity : AppCompatActivity() {
         credentials.put("language","en")
 
         val contact = JSONObject()
-        contact.put("email","user@test.com")
-        contact.put("fullname","name Surname")
-        contact.put("phone","+994XXXXXXXXX")
+        val identity = JSONObject()
+
+        contact.put("email","user1@test.com")
+        contact.put("fullname","name1 Surname1")
+        contact.put("phone","+994776434195")
+
+        identity.put("field","email")
+
         credentials.put("contact",contact)
+        credentials.put("identity",identity)
 
 
         Whelp.Builder()
-            .key("8122035606297043751cd2")
-            .appID("699c11f6fe8db479107dcd958dc4e6b0")
+            .key("679745734630cc9df1a090")
+            .appID("888239c49a01b2bd928902ac588021c7")
             .userCredentials(credentials)
             .open(this) {
                 Log.d(TAG, "onCreate: $it")
@@ -46,6 +52,7 @@ class MainActivity : AppCompatActivity() {
                 binding.whelpView.loadUrl(it)
             }
 
+//        LogoutWhelp.clearFirebaseWhelpToken(applicationContext)
     }
 
     fun launchGetMultipleContents(type: String) {

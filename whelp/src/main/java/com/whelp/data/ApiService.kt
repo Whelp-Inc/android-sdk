@@ -11,6 +11,6 @@ interface ApiService {
     @POST("auth")
     fun auth(@Body auth: RequestBody?): Call<AuthResponse>
 
-    @POST("sdk/logout")
+    @POST("logout")
     suspend fun logout()
 }
