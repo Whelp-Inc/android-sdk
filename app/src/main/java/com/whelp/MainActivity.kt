@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         Whelp.Builder()
             .key("679745734630cc9df1a090")
             .appID("888239c49a01b2bd928902ac588021c7")
-            .firebaseToken("firebaseToken")
+            .firebaseToken("it")
             .userCredentials(credentials)
             .open(this) {
                 Log.d(TAG, "onCreate: $it")
@@ -53,6 +53,9 @@ class MainActivity : AppCompatActivity() {
             }
 
     }
+
+//        LogoutWhelp.clearFirebaseWhelpToken(applicationContext)
+
 
     fun launchGetMultipleContents(type: String) {
         contentLauncher.launch(type)
