@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         contact.put("fullname","name Surname")
         contact.put("phone","+994XXXXXXXXX")
         credentials.put("contact",contact)
-        Log.d(TAG, "onCreate: -----")
+
 
         Whelp.Builder()
             .key("8122035606297043751cd2")
@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
                 binding.whelpView.loadUrl(it)
             }
 
-        LogoutWhelp.clearFirebaseWhelpToken(this)
     }
 
     fun launchGetMultipleContents(type: String) {
