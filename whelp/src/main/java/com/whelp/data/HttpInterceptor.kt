@@ -1,5 +1,6 @@
 package com.whelp.data
 
+import android.util.Log
 import com.whelp.util.FIREBASE_TOKEN
 import com.whelp.util.HASH_ID
 import com.whelp.util.Preferences
@@ -18,6 +19,7 @@ class HttpInterceptor(var preferences: Preferences) : Interceptor {
         request.addHeader("X-APP-ID", preferences.getFromPrefs(X_APP_ID, "") as String)
         request.addHeader("X-DEVICE-OS", "android")
         request.addHeader("X-DEVICE-TOKEN", preferences.getFromPrefs(FIREBASE_TOKEN, "") as String)
+
 
         return chain.proceed(request.build())
     }
