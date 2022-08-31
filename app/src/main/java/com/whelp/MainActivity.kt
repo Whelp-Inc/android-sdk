@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.messaging.FirebaseMessaging
 import com.whelp.databinding.ActivityMainBinding
 import com.whelp.model.Whelp
 import com.whelp.util.LogoutWhelp
@@ -24,35 +25,59 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val credentials = JSONObject()
-        credentials.put("language","en")
+        getFirebaseToken {
+            Log.d(TAG, "onCreate: $it")
 
-        val contact = JSONObject()
-        val identity = JSONObject()
+            val credentials = JSONObject()
+            credentials.put("language", "en")
 
-        contact.put("email","user1@test.com")
-        contact.put("fullname","name1 Surname1")
-        contact.put("phone","+994776434195")
+            val contact = JSONObject()
+            val identity = JSONObject()
 
-        identity.put("field","email")
+            contact.put("email", "user1@test.com")
+            contact.put("fullname", "name1 Surname1")
+            contact.put("phone", "+994776434195")
 
-        credentials.put("contact",contact)
-        credentials.put("identity",identity)
+            identity.put("field", "email")
+
+            credentials.put("contact", contact)
+            credentials.put("identity", identity)
 
 
-        Whelp.Builder()
-            .key("679745734630cc9df1a090")
-            .appID("888239c49a01b2bd928902ac588021c7")
-            .userCredentials(credentials)
-            .open(this) {
-                Log.d(TAG, "onCreate: $it")
+            Whelp.Builder()
+                .key("679745734630cc9df1a090")
+                .appID("888239c49a01b2bd928902ac588021c7")
+                .firebaseToken(it)
+                .userCredentials(credentials)
+                .open(this) {
+                    Log.d(TAG, "onCreate: $it")
 
-                binding.whelpView.webChromeClient = chromeClient
+                    binding.whelpView.webChromeClient = chromeClient
 
-                binding.whelpView.loadUrl(it)
-            }
+                    binding.whelpView.loadUrl(it)
+                }
+
+        }
 
 //        LogoutWhelp.clearFirebaseWhelpToken(applicationContext)
+    }
+
+    private fun getFirebaseToken(firebaseToken: (String) -> Unit) {
+
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    return@addOnCompleteListener
+                }
+
+                firebaseToken.invoke(task.result)
+                Log.d("getFirebaseToken", "getFirebaseToken: ${task.result}")
+            }
+            .addOnCanceledListener {
+
+            }
+            .addOnFailureListener {
+            }
     }
 
     fun launchGetMultipleContents(type: String) {
