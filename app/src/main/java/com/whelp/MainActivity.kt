@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity() {
 
 
         Whelp.Builder()
-            .key("679745734630cc9df1a090")
-            .appID("888239c49a01b2bd928902ac588021c7")
+            .key("api_key")
+            .appID("app_id")
             .firebaseToken("it")
             .userCredentials(credentials)
             .open(this) {

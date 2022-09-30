@@ -1,7 +1,6 @@
 package com.whelp.model
 
 import android.content.Context
-import android.util.Log
 import com.whelp.data.ApiService
 import com.whelp.data.RetrofitClientInstance
 import com.whelp.util.*
@@ -25,7 +24,6 @@ data class Whelp constructor(
         var firebaseToken: String? = null,
         var jsonParams: JSONObject? = null
     ) {
-        val TAG = "getFirebaseToken"
 
         fun key(api_key: String) = apply { this.api_key = api_key }
         fun appID(app_id: String) = apply { this.app_id = app_id }
@@ -38,7 +36,6 @@ data class Whelp constructor(
 
             firebaseToken?.let {
                 preferences.saveToPrefs(FIREBASE_TOKEN, it)
-                Log.d(TAG, "open: $it")
             }
 
             val api: ApiService = RetrofitClientInstance.getRetrofitInstance(context)!!.create(
@@ -60,8 +57,6 @@ data class Whelp constructor(
 
                     val body = response.body()
                     val code = response.code()
-
-                    Log.d("onResponse", "onResponse:--- $body $code")
 
                     if (body != null && code == 200) {
                         sdkUrl.invoke(body.url)

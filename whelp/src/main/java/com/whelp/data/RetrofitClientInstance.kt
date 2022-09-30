@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitClientInstance {
     private lateinit var preferences: Preferences
     private var retrofit: Retrofit? = null
-    private const val BASE_URL = "https://widget-api.dev-whelp.com/sdk/"
+    private const val BASE_URL = "https://widget-api.getwhelp.com/sdk/"
 
     fun getRetrofitInstance(context: Context): Retrofit? {
 
