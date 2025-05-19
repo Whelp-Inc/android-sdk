@@ -6,10 +6,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
-
 
 object RetrofitClientInstance {
     private lateinit var preferences: Preferences
@@ -17,7 +15,6 @@ object RetrofitClientInstance {
     private const val BASE_URL = "https://widget-api.getwhelp.com/sdk/"
 
     fun getRetrofitInstance(context: Context): Retrofit? {
-
         preferences = Preferences(context)
 
         val interceptor = HttpLoggingInterceptor()
@@ -36,7 +33,6 @@ object RetrofitClientInstance {
                 .baseUrl(BASE_URL)
                 .client(client)
                 .addConverterFactory(MoshiConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
         }
         return retrofit

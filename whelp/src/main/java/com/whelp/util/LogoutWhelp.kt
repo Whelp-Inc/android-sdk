@@ -3,8 +3,9 @@ package com.whelp.util
 import android.content.Context
 import com.whelp.data.ApiService
 import com.whelp.data.RetrofitClientInstance
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 object LogoutWhelp {
     fun clearFirebaseWhelpToken(context: Context) {
@@ -12,13 +13,12 @@ object LogoutWhelp {
             ApiService::class.java
         )
 
-        api.logout()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                // Success
-            }, { error ->
-                error.printStackTrace()
-            })
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                api.logout()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 }

@@ -11,8 +11,8 @@ import retrofit2.http.POST
 interface ApiService {
 
     @POST("auth")
-    fun auth(@Body auth: RequestBody?): Call<AuthResponse>
+    suspend fun auth(@Body auth: RequestBody?): AuthResponse
 
     @POST("logout")
-    fun logout(): Completable
+    suspend fun logout()
 }
