@@ -22,18 +22,22 @@ object Utils {
             mac.init(signingKey)
             val rawHmac: ByteArray = mac.doFinal(data?.toByteArray(Charsets.UTF_8))
             val hexArray = byteArrayOf(
-                '0'.toByte(),
-                '1'.toByte(),
-                '2'.toByte(),
-                '3'.toByte(),
-                '4'.toByte(),
-                '5'.toByte(),
-                '6'.toByte(),
-                '7'.toByte(),
-                '8'.toByte(),
-                '9'.toByte(),
-                'a'.toByte(),
-                'b'.toByte(), 'c'.toByte(), 'd'.toByte(), 'e'.toByte(), 'f'.toByte()
+                '0'.code.toByte(),
+                '1'.code.toByte(),
+                '2'.code.toByte(),
+                '3'.code.toByte(),
+                '4'.code.toByte(),
+                '5'.code.toByte(),
+                '6'.code.toByte(),
+                '7'.code.toByte(),
+                '8'.code.toByte(),
+                '9'.code.toByte(),
+                'a'.code.toByte(),
+                'b'.code.toByte(),
+                'c'.code.toByte(),
+                'd'.code.toByte(),
+                'e'.code.toByte(),
+                'f'.code.toByte()
             )
             val hexChars = ByteArray(rawHmac.size * 2)
             for (j in rawHmac.indices) {
@@ -57,9 +61,9 @@ object Utils {
         }
 
         //using the first dot we find in the string
-        val firstDotIndex = pInfo.versionName.indexOf(".")
+        val firstDotIndex = pInfo.versionName.orEmpty().indexOf(".")
         //take only the number before the first dot excluding the dot itself
-        val majorVersion = pInfo.versionName.substring(0, firstDotIndex)
+        val majorVersion = pInfo.versionName.orEmpty().substring(0, firstDotIndex)
 
         return majorVersion.toInt() > 80
     }

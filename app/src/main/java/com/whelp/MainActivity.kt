@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.whelp.databinding.ActivityMainBinding
 import com.whelp.model.Whelp
 import org.json.JSONObject
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
             .appID("app_id")
             .firebaseToken("it")
             .userCredentials(credentials)
-            .open(this) {
+            .open(this, lifecycleScope) {
                 Log.d(TAG, "onCreate: $it")
 
                 binding.whelpView.webChromeClient = chromeClient

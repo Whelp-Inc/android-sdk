@@ -4,34 +4,34 @@ import android.content.Context
 import com.whelp.data.ApiService
 import com.whelp.data.RetrofitClientInstance
 import com.whelp.util.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import timber.log.Timber
 
-data class Whelp constructor(
-    val api_key: String?,
-    val app_id: String?,
+data class Whelp(
+    val apiKey: String?,
+    val appId: String?,
     val firebaseToken: String?,
     val jsonParams: JSONObject
 ) {
 
     data class Builder(
-        var api_key: String? = null,
-        var app_id: String? = null,
+        var apiKey: String? = null,
+        var appId: String? = null,
         var firebaseToken: String? = null,
-        var jsonParams: JSONObject? = null
+        var credentials: JSONObject? = null
     ) {
 
-        fun key(api_key: String) = apply { this.api_key = api_key }
-        fun appID(app_id: String) = apply { this.app_id = app_id }
+        fun key(apiKey: String) = apply { this.apiKey = apiKey }
+        fun appID(appId: String) = apply { this.appId = appId }
         fun firebaseToken(firebaseToken: String) = apply { this.firebaseToken = firebaseToken }
         fun userCredentials(jsonParams: JSONObject) =
-            apply { this.jsonParams = jsonParams }
+            apply { this.credentials = jsonParams }
 
-        fun open(context: Context, sdkUrl: (String) -> Unit) {
+        fun open(context: Context, scope: CoroutineScope, sdkUrl: (String) -> Unit) {
             val preferences = Preferences(context)
 
             firebaseToken?.let {
@@ -42,40 +42,33 @@ data class Whelp constructor(
                 ApiService::class.java
             )
 
-            createHmac(context, jsonParams.toString())
+            createHmac(context, credentials.toString())
 
-            val res = jsonParams.toString().toRequestBody("application/json".toMediaType())
-
-            val call: Call<AuthResponse> = api.auth(res)
+            val res = credentials.toString().toRequestBody("application/json".toMediaType())
 
 
-            call.enqueue(object : Callback<AuthResponse> {
-                override fun onResponse(
-                    call: Call<AuthResponse>,
-                    response: Response<AuthResponse>
-                ) {
-
+            scope.launch {
+                try {
+                    val response = api.auth(res)
                     val body = response.body()
                     val code = response.code()
 
                     if (body != null && code == 200) {
                         sdkUrl.invoke(body.url)
                     }
+                } catch (e: Exception) {
+                    Timber.tag("Whelp").d("Auth failed with: ${e.message}")
                 }
-
-                override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                    t.printStackTrace()
-                }
-            })
+            }
         }
 
 
         private fun createHmac(context: Context, json: String?) {
             val preferences = Preferences(context)
-            val hashValue = Utils.hmac(json, "$api_key$app_id")
+            val hashValue = Utils.hmac(json, "$apiKey$appId")
 
-            preferences.saveToPrefs(HASH_ID, hashValue as String)
-            preferences.saveToPrefs(X_APP_ID, app_id as String)
+            preferences.saveToPrefs(HASH_ID, hashValue)
+            preferences.saveToPrefs(X_APP_ID, appId as String)
         }
     }
 }
