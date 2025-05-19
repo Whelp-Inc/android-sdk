@@ -1,6 +1,8 @@
 package com.whelp.data
 
 import com.whelp.model.AuthResponse
+import io.reactivex.Single
+import io.reactivex.Completable
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -12,5 +14,5 @@ interface ApiService {
     fun auth(@Body auth: RequestBody?): Call<AuthResponse>
 
     @POST("logout")
-    suspend fun logout()
+    fun logout(): Completable
 }
