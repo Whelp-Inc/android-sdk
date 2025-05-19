@@ -66,14 +66,4 @@ class Preferences(context: Context) {
         }
         return defaultValue
     }
-
-    fun removeFromPrefs(key: String?) {
-        val editor = sharedPreferences.edit()
-        editor.remove(key).apply()
-    }
-
-    fun hasKey(key: String?): Boolean {
-        return sharedPreferences.contains(key)
-    }
-
 }
