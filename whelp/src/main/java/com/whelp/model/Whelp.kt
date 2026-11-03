@@ -7,9 +7,9 @@ import com.whelp.util.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 data class Whelp constructor(
     val api_key: String?,
@@ -46,27 +46,16 @@ data class Whelp constructor(
 
             val res = jsonParams.toString().toRequestBody("application/json".toMediaType())
 
-            val call: Call<AuthResponse> = api.auth(res)
-
-
-            call.enqueue(object : Callback<AuthResponse> {
-                override fun onResponse(
-                    call: Call<AuthResponse>,
-                    response: Response<AuthResponse>
-                ) {
-
-                    val body = response.body()
-                    val code = response.code()
-
-                    if (body != null && code == 200) {
-                        sdkUrl.invoke(body.url)
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val url = api.auth(res).url
+                    if (!url.isNullOrBlank()) {
+                        sdkUrl.invoke(url)
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
-
-                override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                    t.printStackTrace()
-                }
-            })
+            }
         }
 
 
